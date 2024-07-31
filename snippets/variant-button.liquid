@@ -54,6 +54,7 @@
         if product.options.size == 1
           assign product_available = product.variants[forloop.index0].available
         endif
+        assign product_count = product.variants[forloop.index0].inventory_quantity
       -%}
       <div
         class="variant-input"
@@ -65,6 +66,7 @@
           value="{{ value | escape }}"
           data-index="option{{ option_index }}"
           name="{{ option.name }}"
+          data-count="{{ product_count }}"
           data-variant-input
           class="{% unless product_available %} disabled{% endunless %}{% if is_color %} variant__input--color-swatch{% endif %}"
           {% if is_color %} data-color-name="{{ value | escape }}"{% endif %}

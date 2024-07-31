@@ -322,6 +322,43 @@
                       {% endif %}
                       {{ block.shopify_attributes }}
                     >
+                      <script>
+                        var shippingLeadTime;
+                        const locale = {{shop.locale | json}};
+                        document.addEventListener('DOMContentLoaded', function () {
+                          let deliveryText = document.querySelector('.product-block--sales-point .icon-truck + span');
+                          console.log("shippingleadtime", deliveryText.textContent);
+                          shippingLeadTime = deliveryText.textContent;
+
+                          const checkedInputs = document.querySelectorAll('input[type="radio"]:checked');
+                          updateDeliveryText(deliveryText);
+
+                          document.addEventListener('variant:change', function (event) {
+                            updateDeliveryText(deliveryText);
+                          });
+                        });
+
+                        function updateDeliveryText(deliveryText) {
+                          const enText = 'Shipping lead time : 4 to 5 weeks';
+                          const frText = "Délai d'expédition : 4 à 5 semaines";
+                          let dataCount = [];
+                          const checkedInputs = document.querySelectorAll('input[type="radio"]:checked');
+                          checkedInputs.forEach(function (input) {
+                            const count = input.getAttribute('data-count');
+                            dataCount.push(count);
+                          });
+                          const allOne = dataCount.length > 0 && dataCount.every((count) => count === '1');
+                          if (allOne) {
+                            deliveryText.textContent = shippingLeadTime;
+                          } else {
+                            if (locale === 'en') {
+                              deliveryText.textContent = enText;
+                            } else {
+                              deliveryText.textContent = frText;
+                            }
+                          }
+                        }
+                      </script>
                       {%- unless product.has_only_default_variant -%}
                         {%- for option in product.options_with_values -%}
                           {%- liquid
