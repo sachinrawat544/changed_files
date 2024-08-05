@@ -347,15 +347,17 @@
                             const count = input.getAttribute('data-count');
                             dataCount.push(count);
                           });
-                          const allOne = dataCount.length > 0 && dataCount.every((count) => count === '1');
-                          if (allOne) {
+                          const allPositive = dataCount.length > 0 && dataCount.every((count) => parseInt(count, 10) > 0);
+                          if (allPositive) {
                             deliveryText.textContent = shippingLeadTime;
-                          } else {
+                          } else if (dataCount.length > 0 ) {
                             if (locale === 'en') {
                               deliveryText.textContent = enText;
                             } else {
                               deliveryText.textContent = frText;
                             }
+                          } else {
+                            deliveryText.textContent = shippingLeadTime;
                           }
                         }
                       </script>
